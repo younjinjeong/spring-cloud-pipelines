@@ -1,5 +1,5 @@
-:jenkins-root-docs: jenkins
-:concourse-root-docs: concourse
+:jenkins-root-docs: img/jenkins
+:concourse-root-docs: img/concourse
 :toc: left
 :toclevels: 8
 :nofooter:

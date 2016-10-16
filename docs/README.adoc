@@ -21,6 +21,8 @@ You can go through the setup for
 Each of these setups are available under the folders `jenkins` and
 `concourse` respectively.
 
+include::INTRO.adoc[]
+
 include::CONCOURSE.adoc[]
 
 include::JENKINS.adoc[]
