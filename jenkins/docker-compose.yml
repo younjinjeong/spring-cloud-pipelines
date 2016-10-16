@@ -10,6 +10,9 @@ master:
     - /var/jenkins_home
   links:
     - artifactory
+  args:
+    gituser: "${PIPELINE_GIT_USERNAME}"
+    gitpass: "${PIPELINE_GIT_PASSWORD}"
 
 artifactory:
   image: jfrog-docker-registry.bintray.io/artifactory/artifactory-oss:latest
