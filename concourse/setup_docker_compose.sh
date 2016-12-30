@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 mkdir -p keys/web keys/worker
 

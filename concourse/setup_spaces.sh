@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u admin -p admin -o pcfdev-org -s pcfdev-test
 

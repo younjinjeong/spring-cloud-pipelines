@@ -92,7 +92,7 @@ parsedRepos.each {
 			}
 		}
 		steps {
-			shell("""#!/bin/bash
+			shell("""#!/bin/bash -x
 		set -e
 
 		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
@@ -149,7 +149,7 @@ parsedRepos.each {
 			}
 		}
 		steps {
-			shell("""#!/bin/bash
+			shell("""#!/bin/bash -x
 		set -e
 
 		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
@@ -197,7 +197,7 @@ parsedRepos.each {
 			}
 		}
 		steps {
-			shell("""#!/bin/bash
+			shell("""#!/bin/bash -x
 		set -e
 
 		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
@@ -259,7 +259,7 @@ parsedRepos.each {
 				}
 			}
 			steps {
-				shell("""#!/bin/bash
+				shell("""#!/bin/bash -x
 		set -e
 
 		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
@@ -310,7 +310,7 @@ parsedRepos.each {
 				}
 			}
 			steps {
-				shell("""#!/bin/bash
+				shell("""#!/bin/bash -x
 		set -e
 
 		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
@@ -372,7 +372,7 @@ parsedRepos.each {
 			}
 		}
 		steps {
-			shell("""#!/bin/bash
+			shell("""#!/bin/bash -x
 		set -e
 
 		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
@@ -429,7 +429,7 @@ parsedRepos.each {
 			}
 		}
 		steps {
-			shell("""#!/bin/bash
+			shell("""#!/bin/bash -x
 		set -e
 
 		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
@@ -497,7 +497,7 @@ parsedRepos.each {
 			}
 		}
 		steps {
-			shell("""#!/bin/bash
+			shell("""#!/bin/bash -x
 		set -e
 
 		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
@@ -539,7 +539,7 @@ parsedRepos.each {
 			}
 		}
 		steps {
-			shell("""#!/bin/bash
+			shell("""#!/bin/bash -x
 			set - e
 
 			${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh') }
