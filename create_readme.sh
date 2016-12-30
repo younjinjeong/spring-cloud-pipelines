@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 ruby coalesce_readme.rb -i 'docs/README.adoc' -o "README.adoc"
 ruby coalesce_readme.rb -i 'docs/JENKINS.adoc' -o "jenkins/README.adoc"

@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 ROOT_ADDRESS=${1:-localhost}
 

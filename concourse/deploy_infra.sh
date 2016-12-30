@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #The script will clone the infra repos and upload them to your artifactory
 #You can provide 1 parameter - it's optional
 #1 - folder to which the projects should be cloned. If not provided will use *build* folder

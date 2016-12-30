@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 yes | cf delete-route local.pcfdev.io -n github-webhook-test
 yes | cf delete-route local.pcfdev.io -n github-analytics-test

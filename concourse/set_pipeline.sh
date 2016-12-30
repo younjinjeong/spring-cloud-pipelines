@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 PIPELINE_NAME=${1:-github-webhook}
 ALIAS=${2:-docker}

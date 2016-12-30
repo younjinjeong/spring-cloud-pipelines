@@ -10,6 +10,6 @@ inputs:
 outputs:
   - name: out
 run:
-  path: /bin/bash -x
+  path: /bin/bash
   args:
     - tools/concourse/tasks/generate-version.sh

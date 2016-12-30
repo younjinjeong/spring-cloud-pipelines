@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 mkdir -p ${HOME}/.m2
 mkdir -p ${HOME}/.gradle
