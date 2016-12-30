@@ -7,7 +7,7 @@ ROOT_IN_M2_RESOURCE="${ROOT_FOLDER}/${M2_REPO}/root"
 export M2_HOME="${ROOT_IN_M2_RESOURCE}/.m2"
 export NEW_LOCAL_REPO="${M2_HOME}/repository/"
 
-set +x
+set -x
 cat > ${HOME}/.m2/settings.xml <<EOF
 
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
@@ -24,23 +24,21 @@ cat > ${HOME}/.m2/settings.xml <<EOF
 </settings>
 
 EOF
-set -x
-
+set +x
 echo "Settings xml written"
 
 export GRADLE_USER_HOME="${ROOT_IN_M2_RESOURCE}/.gradle"
 
 echo "Writing gradle.properties to [${GRADLE_USER_HOME}/gradle.properties]"
 
-set +x
+set -x
 cat > ${GRADLE_USER_HOME}/gradle.properties <<EOF
 
 repoUsername=${M2_SETTINGS_REPO_USERNAME}
 repoPassword=${M2_SETTINGS_REPO_PASSWORD}
 
 EOF
-set -x
-
+set +x
 echo "gradle.properties written"
 
 echo "Moving [${NEW_LOCAL_REPO}] [${HOME}] folder"
