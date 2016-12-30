@@ -1,7 +1,5 @@
 #!/bin/bash
-
 set -e
-set -x
 
 # It takes ages on Docker to run the app without this
 export MAVEN_OPTS="${MAVEN_OPTS} -Djava.security.egd=file:///dev/urandom"
