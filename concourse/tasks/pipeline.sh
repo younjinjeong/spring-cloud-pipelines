@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 export SCRIPTS_OUTPUT_FOLDER=${ROOT_FOLDER}/${REPO_RESOURCE}/ciscripts
 echo "Scripts will be copied to [${SCRIPTS_OUTPUT_FOLDER}]"
 
