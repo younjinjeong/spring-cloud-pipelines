@@ -101,14 +101,6 @@ parsedRepos.each {
 		}
 		publishers {
 			archiveJunit(testReports)
-			downstreamParameterized {
-				trigger("${projectName}-test-env-deploy") {
-					triggerWithNoParameters()
-					parameters {
-						currentBuild()
-					}
-				}
-			}
 			git {
 				tag('origin', "dev/\${PIPELINE_VERSION}") {
 					pushOnlyIfSuccess()
@@ -119,55 +111,6 @@ parsedRepos.each {
 		}
 	}
 
-	dsl.job("${projectName}-test-env-deploy") {
-		deliveryPipelineConfiguration('Test', 'Deploy to test')
-		wrappers {
-			deliveryPipelineVersion('${ENV,var="PIPELINE_VERSION"}', true)
-			parameters(PipelineDefaults.defaultParams())
-			environmentVariables {
-				environmentVariables(defaults.defaultEnvVars)
-				groovy(PipelineDefaults.groovyEnvScript)
-			}
-			credentialsBinding {
-				usernamePassword('CF_TEST_USERNAME', 'CF_TEST_PASSWORD', cfTestCredentialId)
-			}
-			timestamps()
-			colorizeOutput()
-			maskPasswords()
-			timeout {
-				noActivity(300)
-				failBuild()
-				writeDescription('Build failed due to timeout after {0} minutes of inactivity')
-			}
-		}
-		scm {
-			git {
-				remote {
-					url(fullGitRepo)
-					branch('dev/${PIPELINE_VERSION}')
-				}
-			}
-		}
-		steps {
-			shell("""#!/bin/bash
-		set -e
-
-		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
-		${dsl.readFileFromWorkspace(scriptsDir + '/test_deploy.sh')}
-		""")
-		}
-		publishers {
-			downstreamParameterized {
-				trigger("${projectName}-test-env-test") {
-					parameters {
-						propertiesFile('${OUTPUT_FOLDER}/test.properties', true)
-						currentBuild()
-					}
-					triggerWithNoParameters()
-				}
-			}
-		}
-	}
 
 	dsl.job("${projectName}-test-env-test") {
 		deliveryPipelineConfiguration('Test', 'Tests on test')
@@ -206,79 +149,10 @@ parsedRepos.each {
 		}
 		publishers {
 			archiveJunit(testReports)
-			if (rollbackStep) {
-				downstreamParameterized {
-					trigger("${projectName}-test-env-rollback-deploy") {
-						parameters {
-							currentBuild()
-						}
-						triggerWithNoParameters()
-					}
-				}
-			} else {
-				downstreamParameterized {
-					trigger("${projectName}-stage-env-deploy") {
-						parameters {
-							currentBuild()
-						}
-						triggerWithNoParameters()
-					}
-				}
-			}
 		}
 	}
 
 	if (rollbackStep) {
-		dsl.job("${projectName}-test-env-rollback-deploy") {
-			deliveryPipelineConfiguration('Test', 'Deploy to test latest prod version')
-			wrappers {
-				deliveryPipelineVersion('${ENV,var="PIPELINE_VERSION"}', true)
-				parameters(PipelineDefaults.defaultParams())
-				environmentVariables {
-					environmentVariables(defaults.defaultEnvVars)
-					groovy(PipelineDefaults.groovyEnvScript)
-				}
-				credentialsBinding {
-					usernamePassword('CF_TEST_USERNAME', 'CF_TEST_PASSWORD', cfTestCredentialId)
-				}
-				timestamps()
-				colorizeOutput()
-				maskPasswords()
-				timeout {
-					noActivity(300)
-					failBuild()
-					writeDescription('Build failed due to timeout after {0} minutes of inactivity')
-				}
-			}
-			scm {
-				git {
-					remote {
-						url(fullGitRepo)
-						branch('dev/${PIPELINE_VERSION}')
-					}
-				}
-			}
-			steps {
-				shell("""#!/bin/bash
-		set -e
-
-		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
-		${dsl.readFileFromWorkspace(scriptsDir + '/test_rollback_deploy.sh')}
-		""")
-			}
-			publishers {
-				downstreamParameterized {
-					trigger("${projectName}-test-env-rollback-test") {
-						triggerWithNoParameters()
-						parameters {
-							propertiesFile('${OUTPUT_FOLDER}/test.properties', false)
-							currentBuild()
-						}
-					}
-				}
-			}
-		}
-
 		dsl.job("${projectName}-test-env-rollback-test") {
 			deliveryPipelineConfiguration('Test', 'Tests on test latest prod version')
 			wrappers {
@@ -321,82 +195,6 @@ parsedRepos.each {
 				archiveJunit(testReports) {
 					allowEmptyResults()
 				}
-				String nextJob = "${projectName}-stage-env-deploy"
-				if (autoStage) {
-					downstreamParameterized {
-						trigger(nextJob) {
-							parameters {
-								currentBuild()
-							}
-						}
-					}
-				} else {
-					buildPipelineTrigger(nextJob) {
-						parameters {
-							currentBuild()
-						}
-					}
-				}
-			}
-		}
-	}
-
-	dsl.job("${projectName}-stage-env-deploy") {
-		deliveryPipelineConfiguration('Stage', 'Deploy to stage')
-		wrappers {
-			deliveryPipelineVersion('${ENV,var="PIPELINE_VERSION"}', true)
-			maskPasswords()
-			parameters(PipelineDefaults.defaultParams())
-			environmentVariables {
-				environmentVariables(defaults.defaultEnvVars)
-				groovy(PipelineDefaults.groovyEnvScript)
-			}
-			credentialsBinding {
-				usernamePassword('CF_STAGE_USERNAME', 'CF_STAGE_PASSWORD', cfStageCredentialId)
-			}
-			timestamps()
-			colorizeOutput()
-			maskPasswords()
-			timeout {
-				noActivity(300)
-				failBuild()
-				writeDescription('Build failed due to timeout after {0} minutes of inactivity')
-			}
-		}
-		scm {
-			git {
-				remote {
-					url(fullGitRepo)
-					branch('dev/${PIPELINE_VERSION}')
-				}
-			}
-		}
-		steps {
-			shell("""#!/bin/bash
-		set -e
-
-		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
-		${dsl.readFileFromWorkspace(scriptsDir + '/stage_deploy.sh')}
-		""")
-		}
-		publishers {
-			if (autoStage) {
-				downstreamParameterized {
-					trigger("${projectName}-stage-env-test") {
-						triggerWithNoParameters()
-						parameters {
-							currentBuild()
-							propertiesFile('${OUTPUT_FOLDER}/test.properties', true)
-						}
-					}
-				}
-			} else {
-				buildPipelineTrigger("${projectName}-stage-env-test") {
-					parameters {
-						currentBuild()
-						propertiesFile('${OUTPUT_FOLDER}/test.properties', true)
-					}
-				}
 			}
 		}
 	}
@@ -438,85 +236,6 @@ parsedRepos.each {
 		}
 		publishers {
 			archiveJunit(testReports)
-			String nextJob = "${projectName}-prod-env-deploy"
-			if (autoProd) {
-				downstreamParameterized {
-					trigger(nextJob) {
-						parameters {
-							currentBuild()
-						}
-					}
-				}
-			} else {
-				buildPipelineTrigger(nextJob) {
-					parameters {
-						currentBuild()
-					}
-				}
-			}
-		}
-	}
-
-	dsl.job("${projectName}-prod-env-deploy") {
-		deliveryPipelineConfiguration('Prod', 'Deploy to prod')
-		wrappers {
-			deliveryPipelineVersion('${ENV,var="PIPELINE_VERSION"}', true)
-			maskPasswords()
-			parameters(PipelineDefaults.defaultParams())
-			environmentVariables {
-				environmentVariables(defaults.defaultEnvVars)
-				groovy(PipelineDefaults.groovyEnvScript)
-			}
-			credentialsBinding {
-				usernamePassword('CF_PROD_USERNAME', 'CF_PROD_PASSWORD', cfProdCredentialId)
-			}
-			timestamps()
-			colorizeOutput()
-			maskPasswords()
-			timeout {
-				noActivity(300)
-				failBuild()
-				writeDescription('Build failed due to timeout after {0} minutes of inactivity')
-			}
-		}
-		scm {
-			git {
-				remote {
-					name('origin')
-					url(fullGitRepo)
-					branch('dev/${PIPELINE_VERSION}')
-					credentials(gitCredentials)
-				}
-			}
-		}
-		configure { def project ->
-			// Adding user email and name here instead of global settings
-			project / 'scm' / 'extensions' << 'hudson.plugins.git.extensions.impl.UserIdentity' {
-				'email'(gitEmail)
-				'name'(gitName)
-			}
-		}
-		steps {
-			shell("""#!/bin/bash
-		set -e
-
-		${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh')}
-		${dsl.readFileFromWorkspace(scriptsDir + '/prod_deploy.sh')}
-		""")
-		}
-		publishers {
-			buildPipelineTrigger("${projectName}-prod-env-complete") {
-				parameters {
-					currentBuild()
-				}
-			}
-			git {
-				tag('origin', "prod/\${PIPELINE_VERSION}") {
-					pushOnlyIfSuccess()
-					create()
-					update()
-				}
-			}
 		}
 	}
 

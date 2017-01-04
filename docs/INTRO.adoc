@@ -10,15 +10,12 @@ step and describe it in details.
 ----
 .
 ├── common
-├── concourse
 ├── docs
 └── jenkins
 ----
 
 In the `common` folder you can find all the Bash scripts containing the pipeline logic. These
 scripts are reused by both Concourse and Jenkins pipelines.
-
-In the `concourse` folder you can find all the necessary scripts and setup to run Concourse demo.
 
 In the `docs` section you have the whole documentation of the project.
 

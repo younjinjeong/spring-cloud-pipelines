@@ -52,8 +52,6 @@ Each of these setups are available under the folders `jenkins` and
 
 include::INTRO.adoc[]
 
-include::CONCOURSE.adoc[]
-
 include::JENKINS.adoc[]
 
 include::TECH.adoc[]
