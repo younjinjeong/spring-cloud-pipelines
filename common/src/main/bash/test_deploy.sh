@@ -20,7 +20,8 @@ logInToCf "${REDOWNLOAD_INFRA}" "${CF_TEST_USERNAME}" "${CF_TEST_PASSWORD}" "${C
 # setup infra
 deployRabbitMqToCf
 deployEureka ${REDEPLOY_INFRA} "${EUREKA_ARTIFACT_ID}-${EUREKA_VERSION}" "${EUREKA_ARTIFACT_ID}" "test"
-deployStubRunnerBoot ${REDEPLOY_INFRA} "${STUBRUNNER_ARTIFACT_ID}-${STUBRUNNER_VERSION}" "${REPO_WITH_JARS}"
+stubRunnerName="stubrunner-${projectArtifactId}-test"
+deployStubRunnerBoot ${REDEPLOY_INFRA} "${STUBRUNNER_ARTIFACT_ID}-${STUBRUNNER_VERSION}" "${REPO_WITH_JARS}" "test" "${stubRunnerName}"
 # deploy app
 deployAndRestartAppWithNameForSmokeTests ${projectArtifactId} "${projectArtifactId}-${PIPELINE_VERSION}"
-propagatePropertiesForTests ${projectArtifactId}
+propagatePropertiesForTests ${projectArtifactId} "${stubRunnerName}"
