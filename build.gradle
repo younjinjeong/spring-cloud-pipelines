@@ -24,12 +24,7 @@ task generateJenkinsReadme(type: JRubyExec) {
 	scriptArgs "-idocs/JENKINS.adoc",  "-ojenkins/README.adoc"
 }
 
-task generateConcourseReadme(type: JRubyExec) {
-	script "${projectDir}/coalesce_readme.rb"
-	scriptArgs "-idocs/CONCOURSE.adoc",  "-oconcourse/README.adoc"
-}
-
-task generateIndex(type: JRubyExec, dependsOn: ["generateMainReadme", "generateJenkinsReadme", "generateConcourseReadme"]) {
+task generateIndex(type: JRubyExec, dependsOn: ["generateMainReadme", "generateJenkinsReadme"]) {
 	script "${projectDir}/generate_index.rb"
 }
 
