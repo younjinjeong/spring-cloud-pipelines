@@ -70,7 +70,7 @@ function appHost() {
     local appName="${1}"
     local lowerCase="$( echo "${appName}" | tr '[:upper:]' '[:lower:]' )"
     APP_HOST=`cf apps | grep ${lowerCase} | tr -s ' ' | cut -d' ' -f 6 | cut -d, -f1`
-    echo "${APP_HOST}"
+    echo "${APP_HOST}" | tail -1
 }
 
 function deployAppWithName() {
