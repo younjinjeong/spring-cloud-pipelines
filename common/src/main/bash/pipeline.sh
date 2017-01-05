@@ -364,7 +364,7 @@ function prepareForSmokeTests() {
     projectArtifactId=$( retrieveArtifactId )
     mkdir -p "${OUTPUT_FOLDER}"
     logInToCf "${redownloadInfra}" "${username}" "${password}" "${org}" "${space}" "${api}"
-    propagatePropertiesForTests ${projectArtifactId}
+    propagatePropertiesForTests ${projectArtifactId} "${projectArtifactId}-stubrunner-test"
     readTestPropertiesFromFile
 }
 
@@ -381,7 +381,7 @@ function prepareForE2eTests() {
     projectArtifactId=$( retrieveArtifactId )
     mkdir -p "${OUTPUT_FOLDER}"
     logInToCf "${redownloadInfra}" "${username}" "${password}" "${org}" "${space}" "${api}"
-    propagatePropertiesForTests ${projectArtifactId}
+    propagatePropertiesForTests ${projectArtifactId} "${projectArtifactId}-stubrunner-stage"
     readTestPropertiesFromFile
 }
 
