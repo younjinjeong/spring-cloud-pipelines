@@ -430,6 +430,20 @@ function retrieveStubRunnerIds() {
     fi
 }
 
+function renameTheOldApplication() {
+    local appName="${1}"
+    local newName="${appName}-venerable"
+    echo "Renaming the app from [${appName}] -> [${newName}]"
+    cf rename "${appName}" "${newName}"
+}
+
+function deleteTheOldApplication() {
+    local appName="${1}"
+    local oldName="${appName}-venerable"
+    echo "Deleting the app [${oldName}]"
+    cf delete "${oldName}" -r -f
+}
+
 export PROJECT_TYPE=$( projectType )
 export OUTPUT_FOLDER=$( outputFolder )
 export TEST_REPORTS_FOLDER=$( testResultsFolder )
