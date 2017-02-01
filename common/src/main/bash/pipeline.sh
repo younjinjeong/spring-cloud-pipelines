@@ -430,18 +430,29 @@ function retrieveStubRunnerIds() {
     fi
 }
 
-function renameTheOldApplication() {
+function renameTheOldApplicationIfPresent() {
     local appName="${1}"
     local newName="${appName}-venerable"
     echo "Renaming the app from [${appName}] -> [${newName}]"
-    cf rename "${appName}" "${newName}"
+    local appPresent="no"
+    cf app "${appName}" && appPresent="yes"
+    if [[ "${appPresent}" == "yes" ]]; then
+        cf rename "${appName}" "${newName}"
+    else
+        echo "Will not rename the application cause it's not there"
+    fi
 }
 
-function deleteTheOldApplication() {
+function deleteTheOldApplicationIfPresent() {
     local appName="${1}"
     local oldName="${appName}-venerable"
     echo "Deleting the app [${oldName}]"
-    cf delete "${oldName}" -r -f
+    cf app "${oldName}" && appPresent="yes"
+    if [[ "${appPresent}" == "yes" ]]; then
+        cf delete "${oldName}" -r -f
+    else
+        echo "Will not remove the old application cause it's not there"
+    fi
 }
 
 export PROJECT_TYPE=$( projectType )
