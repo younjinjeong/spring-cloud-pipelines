@@ -542,6 +542,16 @@ parsedRepos.each {
 				writeDescription('Build failed due to timeout after {0} minutes of inactivity')
 			}
 		}
+		scm {
+			git {
+				remote {
+					name('origin')
+					url(fullGitRepo)
+					branch('dev/${PIPELINE_VERSION}')
+					credentials(gitCredentials)
+				}
+			}
+		}
 		steps {
 			shell("""#!/bin/bash
 			set - e
