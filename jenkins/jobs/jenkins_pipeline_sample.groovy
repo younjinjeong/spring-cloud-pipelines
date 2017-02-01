@@ -524,10 +524,14 @@ parsedRepos.each {
 		deliveryPipelineConfiguration('Prod', 'Complete switch over')
 		wrappers {
 			deliveryPipelineVersion('${ENV,var="PIPELINE_VERSION"}', true)
+			maskPasswords()
 			parameters(PipelineDefaults.defaultParams())
 			environmentVariables {
 				environmentVariables(defaults.defaultEnvVars)
 				groovy(PipelineDefaults.groovyEnvScript)
+			}
+			credentialsBinding {
+				usernamePassword('CF_PROD_USERNAME', 'CF_PROD_PASSWORD', cfProdCredentialId)
 			}
 			timestamps()
 			colorizeOutput()
