@@ -379,8 +379,11 @@ function prepareForE2eTests() {
     echo "Retrieving group and artifact id - it can take a while..."
     projectGroupId=$( retrieveGroupId )
     projectArtifactId=$( retrieveArtifactId )
+    echo "Project groupId is ${projectGroupId}"
+    echo "Project artifactId is ${projectArtifactId}"
     mkdir -p "${OUTPUT_FOLDER}"
     logInToCf "${redownloadInfra}" "${username}" "${password}" "${org}" "${space}" "${api}"
+    propagatePropertiesForTests ${projectArtifactId}
     readTestPropertiesFromFile
 }
 
