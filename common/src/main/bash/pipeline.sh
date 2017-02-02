@@ -449,7 +449,7 @@ function doRenameApplicationIfPresent() {
 function renameTheOldApplicationIfPresent() {
     local oldAppName="${1}"
     local newName="${oldAppName}-venerable"
-    doRenameApplicationIfPresent "${oldAppName}" "${newName}"
+    doRenameApplicationIfPresent "${oldAppName}" "${newName}" || echo "Something went wrong but will continue"
 }
 
 function rollbackTheRenameOfOldApplication() {
@@ -472,7 +472,7 @@ function doDeleteApplicationIfPresent() {
 function deleteTheOldApplicationIfPresent() {
     local appName="${1}"
     local oldName="${appName}-venerable"
-    doDeleteApplicationIfPresent "${oldName}"
+    doDeleteApplicationIfPresent "${oldName}" || echo "Something went wrong but will continue"
 }
 
 function deleteTheNewAppIfPresent() {
