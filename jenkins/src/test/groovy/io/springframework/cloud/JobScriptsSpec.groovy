@@ -27,6 +27,7 @@ class JobScriptsSpec extends Specification {
 		jm.availableFiles['foo/stage_e2e.sh'] = JobScriptsSpec.getResource('/stage_e2e.sh').text
 		jm.availableFiles['foo/prod_deploy.sh'] = JobScriptsSpec.getResource('/prod_deploy.sh').text
 		jm.availableFiles['foo/prod_complete.sh'] = JobScriptsSpec.getResource('/prod_complete.sh').text
+		jm.availableFiles['foo/prod_rollback.sh'] = JobScriptsSpec.getResource('/prod_rollback.sh').text
 		jm.parameters << [
 				SCRIPTS_DIR: 'foo'
 		]
