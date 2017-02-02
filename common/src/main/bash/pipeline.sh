@@ -442,7 +442,7 @@ function doRenameApplicationIfPresent() {
     if [[ "${appPresent}" == "yes" ]]; then
         cf rename "${oldAppName}" "${newName}"
     else
-        echo "Will not rename the application cause it's not there"
+        echo "Will not rename the [${oldAppName}] application cause it's not present" && exit 1
     fi
 }
 
@@ -465,7 +465,7 @@ function doDeleteApplicationIfPresent() {
     if [[ "${appPresent}" == "yes" ]]; then
         cf delete "${appName}" -r -f
     else
-        echo "Will not remove the old application cause it's not there"
+        echo "Will not remove the [${appName}] application cause it's not present" && exit 1
     fi
 }
 

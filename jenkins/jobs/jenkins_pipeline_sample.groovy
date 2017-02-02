@@ -454,6 +454,11 @@ parsedRepos.each {
 					}
 				}
 			}
+			buildPipelineTrigger("${projectName}-prod-env-rollback") {
+				parameters {
+					currentBuild()
+				}
+			}
 		}
 	}
 
@@ -506,11 +511,6 @@ parsedRepos.each {
 		}
 		publishers {
 			buildPipelineTrigger("${projectName}-prod-env-complete") {
-				parameters {
-					currentBuild()
-				}
-			}
-			buildPipelineTrigger("${projectName}-prod-env-rollback") {
 				parameters {
 					currentBuild()
 				}
