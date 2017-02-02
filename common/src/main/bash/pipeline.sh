@@ -433,29 +433,51 @@ function retrieveStubRunnerIds() {
     fi
 }
 
-function renameTheOldApplicationIfPresent() {
-    local appName="${1}"
-    local newName="${appName}-venerable"
-    echo "Renaming the app from [${appName}] -> [${newName}]"
+function doRenameApplicationIfPresent() {
+    local oldAppName="${1}"
+    local newName="${2}"
+    echo "Renaming the app from [${oldAppName}] -> [${newName}]"
     local appPresent="no"
-    cf app "${appName}" && appPresent="yes"
+    cf app "${oldAppName}" && appPresent="yes"
     if [[ "${appPresent}" == "yes" ]]; then
-        cf rename "${appName}" "${newName}"
+        cf rename "${oldAppName}" "${newName}"
     else
         echo "Will not rename the application cause it's not there"
+    fi
+}
+
+function renameTheOldApplicationIfPresent() {
+    local oldAppName="${1}"
+    local newName="${oldAppName}-venerable"
+    doRenameApplicationIfPresent "${oldAppName}" "${newName}"
+}
+
+function rollbackTheRenameOfOldApplication() {
+    local oldAppName="${1}-venerable"
+    local newName="${1}"
+    doRenameApplicationIfPresent "${oldAppName}" "${newName}"
+}
+
+function doDeleteApplicationIfPresent() {
+    local appName="${1}"
+    echo "Deleting the app [${appName}]"
+    cf app "${appName}" && appPresent="yes"
+    if [[ "${appPresent}" == "yes" ]]; then
+        cf delete "${appName}" -r -f
+    else
+        echo "Will not remove the old application cause it's not there"
     fi
 }
 
 function deleteTheOldApplicationIfPresent() {
     local appName="${1}"
     local oldName="${appName}-venerable"
-    echo "Deleting the app [${oldName}]"
-    cf app "${oldName}" && appPresent="yes"
-    if [[ "${appPresent}" == "yes" ]]; then
-        cf delete "${oldName}" -r -f
-    else
-        echo "Will not remove the old application cause it's not there"
-    fi
+    doDeleteApplicationIfPresent "${oldName}"
+}
+
+function deleteTheNewAppIfPresent() {
+    local appName="${1}"
+    doDeleteApplicationIfPresent "${appName}"
 }
 
 export PROJECT_TYPE=$( projectType )

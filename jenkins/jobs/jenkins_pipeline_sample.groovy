@@ -510,6 +510,11 @@ parsedRepos.each {
 					currentBuild()
 				}
 			}
+			buildPipelineTrigger("${projectName}-prod-env-rollback") {
+				parameters {
+					currentBuild()
+				}
+			}
 			git {
 				tag('origin', "prod/\${PIPELINE_VERSION}") {
 					pushOnlyIfSuccess()
@@ -558,6 +563,48 @@ parsedRepos.each {
 
 			${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh') }
 			${dsl.readFileFromWorkspace(scriptsDir + '/prod_complete.sh') }
+		""")
+		}
+	}
+
+	dsl.job("${projectName}-prod-rollback") {
+		deliveryPipelineConfiguration('Prod', 'Rollback')
+		wrappers {
+			deliveryPipelineVersion('${ENV,var="PIPELINE_VERSION"}', true)
+			maskPasswords()
+			parameters(PipelineDefaults.defaultParams())
+			environmentVariables {
+				environmentVariables(defaults.defaultEnvVars)
+				groovy(PipelineDefaults.groovyEnvScript)
+			}
+			credentialsBinding {
+				usernamePassword('CF_PROD_USERNAME', 'CF_PROD_PASSWORD', cfProdCredentialId)
+			}
+			timestamps()
+			colorizeOutput()
+			maskPasswords()
+			timeout {
+				noActivity(300)
+				failBuild()
+				writeDescription('Build failed due to timeout after {0} minutes of inactivity')
+			}
+		}
+		scm {
+			git {
+				remote {
+					name('origin')
+					url(fullGitRepo)
+					branch('dev/${PIPELINE_VERSION}')
+					credentials(gitCredentials)
+				}
+			}
+		}
+		steps {
+			shell("""#!/bin/bash
+			set - e
+
+			${dsl.readFileFromWorkspace(scriptsDir + '/pipeline.sh') }
+			${dsl.readFileFromWorkspace(scriptsDir + '/prod_rollback.sh') }
 		""")
 		}
 	}
