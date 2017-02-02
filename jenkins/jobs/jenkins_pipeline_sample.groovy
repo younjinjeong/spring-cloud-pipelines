@@ -567,7 +567,7 @@ parsedRepos.each {
 		}
 	}
 
-	dsl.job("${projectName}-prod-rollback") {
+	dsl.job("${projectName}-prod-env-rollback") {
 		deliveryPipelineConfiguration('Prod', 'Rollback')
 		wrappers {
 			deliveryPipelineVersion('${ENV,var="PIPELINE_VERSION"}', true)
