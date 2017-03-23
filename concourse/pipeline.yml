@@ -28,6 +28,7 @@ jobs:
       - aggregate:
         - get: tools
         - get: version
+          trigger: true
       - task: generate-version
         file: tools/concourse/tasks/generate-version.yml
         params:
